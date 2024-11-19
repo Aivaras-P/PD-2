@@ -54,12 +54,6 @@ public:
     string getUsername() const { return username_; }
     string getPassword() const { return password_; }
 
-    // Pagrindinė funkcija, kuri gražina naudotojo info
-    virtual void printInfo() const {
-        std::cout << "ID: " << id_ << ", Name: " << name_ << ", Role: " << role_
-            << ", Username: " << username_ << ", Password: " << password_ << std::endl;
-    }
-
 private:
     int id_;
     string name_;
@@ -1971,7 +1965,7 @@ int main() {
         htmlContent += "<button type='submit'>Priskirti grupe destomui dalykui</button>";
         htmlContent += "</form>";
 
-        htmlContent += "<h1>Pasalinti dalyka is grupes</h1>";
+        htmlContent += "<h1>Pasalinti destoma dalyka is grupes</h1>";
 
         // Forma pašalinimo
         htmlContent += "<form action='/delete_groupandsubjects' method='POST'>";
@@ -2091,7 +2085,7 @@ int main() {
         // 3. Lentelė - Dėstytojai su priskirtais dalykais
         htmlContent += "<h2>Destytojai su priskirtais destomais dalykais</h2>";
         htmlContent += "<table border='1' style='width: 100%;'>";
-        htmlContent += "<tr><th>Dėstytojo ID</th><th>Vardas ir Pavarde</th><th>Destomo dalyko ID</th><th>Destomo dalyko pavadinimas</th></tr>";
+        htmlContent += "<tr><th>Destytojo ID</th><th>Vardas ir Pavarde</th><th>Destomo dalyko ID</th><th>Destomo dalyko pavadinimas</th></tr>";
 
         // Naudojame funkciją getTeacherSubjectInfo
         std::vector<std::tuple<int, std::string, std::string, int, std::string>> teacherSubjectInfo = admin.getTeacherSubjectInfo(con);
@@ -2120,7 +2114,7 @@ int main() {
 
         // Forma priskyrimo
         htmlContent += "<form action='/add_teacherandsubjects' method='POST'>";
-        htmlContent += "<label for='teacher_id'>Dėstytojo ID:</label><br>";
+        htmlContent += "<label for='teacher_id'>Destytojo ID:</label><br>";
         htmlContent += "<input type='number' name='teacher_id' required><br><br>";
         htmlContent += "<label for='subject_id'>Dalyko ID:</label><br>";
         htmlContent += "<input type='number' name='subject_id' required><br><br>";
@@ -2131,7 +2125,7 @@ int main() {
 
         // Forma pašalinimo
         htmlContent += "<form action='/delete_teacherandsubjects' method='POST'>";
-        htmlContent += "<label for='teacher_id'>Dėstytojo ID:</label><br>";
+        htmlContent += "<label for='teacher_id'>Destytojo ID:</label><br>";
         htmlContent += "<input type='number' name='teacher_id' required><br><br>";
         htmlContent += "<label for='subject_id'>Dalyko ID:</label><br>";
         htmlContent += "<input type='number' name='subject_id' required><br><br>";
@@ -2405,7 +2399,7 @@ int main() {
 
                         // Formos dalis (dešinėje)
                         htmlContent += "<div style='width: 50%; padding: 10px;'>";
-                        htmlContent += "<h1>Valdymo panelė</h1>";
+                        htmlContent += "<h1>Valdymo panele</h1>";
 
                         // Pašalinti dalyką formą
                         htmlContent += "<h2>Pasalinti destoma dalyka pagal ID</h2>";
