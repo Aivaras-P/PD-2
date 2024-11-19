@@ -1,0 +1,236 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studentų Pažymiai - {{subject_name}}</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .left-side {
+            width: 45%;
+        }
+
+        .right-side {
+            width: 45%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        .message, .error {
+            margin-top: 10px;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        .message {
+            background-color: green;
+        }
+
+        .error {
+            background-color: red;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-side">
+            <button onclick="history.back()" style="padding: 10px; font-size: 1.2em; position: absolute; top: 10px; left: 8px;">Atgal</button>
+            <h3> .</h3>
+            <h3>Studentų sąrašas</h3>
+            <table>
+                <tr>
+                    <th>Studento ID</th>
+                    <th>Vardas</th>
+                    <th>Pavardė</th>
+                    <th>Pažymys</th>
+                </tr>
+                {{students}}
+            </table>
+        </div>
+
+
+
+        <div class="right-side">
+
+            <h3> Pridėti pažymį </h3>
+            <form id="add_grade_form" method="POST" action="/add_grade">
+                <input type="hidden" id="subject_id_add" name="subject_id" value="{{subject_id}}">
+                <div>
+                    <label for="student_id_add">Studento ID:</label>
+                    <input type="number" id="student_id_add" name="student_id" required>
+                </div>
+                <div>
+                    <label for="grade_add">Pažymys:</label>
+                    <input type="number" id="grade_add" name="grade" min="1" max="10" required>
+                </div>
+                <button type="submit">Pridėti pažymį</button>
+
+                <div id="message_add"></div>
+                <div id="error_add"></div>
+            </form>
+            <h3> Ištrinti pažymį </h3>
+            <form id="delete_grade_form" method="POST" action="/delete_grade/{{subject_id}}">
+                <div>
+                    <label for="student_id_delete">Studento ID:</label>
+                    <input type="number" id="student_id_delete" name="student_id" required>
+                </div>
+                <button type="submit">Ištrinti pažymį</button>
+                <div id="message_delete" style="color: green;"></div>
+                <div id="error_delete" style="color: red;"></div>
+            </form>
+            <h3> Koreguoti pažymį </h3>
+            <form id="update_grade_form" method="POST" action="/update_grade">
+                <input type="hidden" id="subject_id_update" name="subject_id" value="{{subject_id}}">
+                <div>
+                    <label for="student_id_update">Studento ID:</label>
+                    <input type="number" id="student_id_update" name="student_id" required>
+                </div>
+                <div>
+                    <label for="grade_update">Naujas pažymys:</label>
+                    <input type="number" id="grade_update" name="grade" min="1" max="10" required>
+                </div>
+                <button type="submit">Redaguoti pažymį</button>
+
+                <div id="message_update"></div>
+                <div id="error_update"></div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <script>
+        // Pridėjimo forma
+        document.getElementById("add_grade_form").onsubmit = function (event) {
+            event.preventDefault();
+
+            let studentId = document.getElementById("student_id_add").value;
+            let grade = document.getElementById("grade_add").value;
+            let subjectId = document.getElementById("subject_id_add").value;
+
+            fetch("/add_grade", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    student_id: studentId,
+                    grade: grade,
+                    subject_id: subjectId
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        document.getElementById("message_add").innerText = data.message;
+                        document.getElementById("error_add").innerText = "";
+                    } else {
+                        document.getElementById("error_add").innerText = data.message;
+                        document.getElementById("message_add").innerText = "";
+                    }
+                    // Perkrauname puslapį po 2.5 sekundžių
+                    setTimeout(() => location.reload(), 2500);
+                })
+                .catch(error => {
+                    document.getElementById("error_add").innerText = "Įvyko klaida!";
+                    document.getElementById("message_add").innerText = "";
+                    setTimeout(() => location.reload(), 2500);
+                });
+        };
+
+        // Ištrynimo forma
+        document.getElementById("delete_grade_form").onsubmit = function (event) {
+            event.preventDefault(); // Užkirsti kelią formai siųsti tradiciškai
+
+            let studentId = document.getElementById("student_id_delete").value;
+
+            // Gaukite subject_id iš URL, kuris bus pateikiamas kaip dinaminis URL parametras
+            let subjectId = window.location.pathname.split('/')[2]; // Paimame <subject_id> iš URL
+
+            fetch(`/delete_grade/${subjectId}`, { // Siųsime į maršrutą su subject_id
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    student_id: studentId
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        document.getElementById("message_delete").innerText = data.message;
+                        document.getElementById("error_delete").innerText = "";
+                    } else {
+                        document.getElementById("error_delete").innerText = data.message;
+                        document.getElementById("message_delete").innerText = "";
+                    }
+
+                    setTimeout(() => location.reload(), 2500);
+                })
+                .catch(error => {
+                    document.getElementById("error_delete").innerText = "Įvyko klaida!";
+                    document.getElementById("message_delete").innerText = "";
+                    setTimeout(() => location.reload(), 2500);
+                });
+        };
+
+        document.getElementById("update_grade_form").onsubmit = function (event) {
+            event.preventDefault();
+
+            let studentId = document.getElementById("student_id_update").value;
+            let newGrade = document.getElementById("grade_update").value;
+            let subjectId = document.getElementById("subject_id_update").value;
+
+            fetch("/update_grade", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    student_id: studentId,
+                    grade: newGrade,
+                    subject_id: subjectId
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        document.getElementById("message_update").innerText = data.message;
+                        document.getElementById("error_update").innerText = "";
+                        setTimeout(() => location.reload(), 2500);
+                    } else {
+                        document.getElementById("error_update").innerText = data.message;
+                        document.getElementById("message_update").innerText = "";
+                        setTimeout(() => location.reload(), 2500);
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("error_update").innerText = "Klaida užklausos metu.";
+                    document.getElementById("message_update").innerText = "";
+                    setTimeout(() => location.reload(), 2500);
+                });
+        };
+    </script>
+
+</body>
+</html>

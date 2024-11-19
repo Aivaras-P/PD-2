@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administratoriaus valdymo skydelis</title>
+    <style>
+       
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 1em;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+        }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff4d4d;
+            color: white;
+        }
+
+            .logout-button:hover {
+                background-color: #ff1a1a;
+            }
+
+        
+        .section {
+            background: white;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+            .section h2 {
+                margin-top: 0;
+                color: #444;
+            }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="logout-button" onclick="window.location.href='/'">Atsijungti</button>
+
+    <h1>Administratoriaus valdymo skydelis</h1>
+
+    
+    <div class="section">
+        <h2>Studentai</h2>
+        <div class="buttons">
+            <button onclick="window.location.href='/students'">Studentų tvarkymo langas</button>
+            <button onclick="window.location.href='/groupandstudents'">Studentų su grupėmis tvarkymo langas</button>
+        </div>
+    </div>
+
+    
+    <div class="section">
+        <h2>Dėstytojai</h2>
+        <div class="buttons">
+            <button onclick="window.location.href='/teachers'">Dėstytojų tvarkymo langas</button>
+            <button onclick="window.location.href='/teacherandsubjects'">Dėstytojo priskyrimas prie dėstomo dalyko</button>
+        </div>
+    </div>
+
+    
+    <div class="section">
+        <h2>Grupės</h2>
+        <div class="buttons">
+            <button onclick="window.location.href='/groups'">Grupių tvarkymo langas</button>
+            <button onclick="window.location.href='/groupandsubjects'">Grupių ir dėstomų dalykų tvarkymo langas</button>
+        </div>
+    </div>
+
+    
+    <div class="section">
+        <h2>Studijuojami dalykai</h2>
+        <div class="buttons">
+            <button onclick="window.location.href='/subjects'">Studijuojamų dalykų tvarkymo langas</button>
+        </div>
+    </div>
+
+</body>
+</html>
